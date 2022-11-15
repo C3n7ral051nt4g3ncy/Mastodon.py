@@ -38,7 +38,7 @@ def test_account_relationships(api):
 def test_account_search(api):
     results = api.account_search('admin')
     admin_acc = results[0]
-    
+
     assert isinstance(results, list)
     assert len(results) == 2
 
@@ -46,12 +46,12 @@ def test_account_search(api):
     results = api.account_search('admin', following = True)
     assert isinstance(results, list)
     assert len(results) == 1
-    
+
     api.account_unfollow(admin_acc)
     results = api.account_search('admin', following = True)
     assert isinstance(results, list)
     assert len(results) == 0
-    
+
     results = api.account_search('admin')
     assert isinstance(results, list)
     assert len(results) == 2
@@ -170,7 +170,7 @@ def test_account_pinned(status, status2, api):
         status = api.status_pin(status['id'])
         pinned = api.account_statuses(api.account_verify_credentials(), pinned = True)
         assert status in pinned
-        assert not status2 in pinned
+        assert status2 not in pinned
     finally:
         api.status_unpin(status['id'])
 
@@ -189,21 +189,21 @@ def test_follow_suggestions(api2, status):
 @pytest.mark.vcr()
 def test_account_pin_unpin(api, api2):
     user = api2.account_verify_credentials()
-    
+
     # Make sure we are in the correct state
     try:
         api.account_follow(user)
     except:
         pass
-    
+
     try:
         api.account_unpin(user)
     except:
         pass
-    
+
     relationship = api.account_pin(user)
     endorsed = api.endorsements()
-        
+
     try:
         assert relationship
         assert relationship['endorsed']
@@ -211,10 +211,10 @@ def test_account_pin_unpin(api, api2):
     finally:
         relationship = api.account_unpin(user)
         endorsed2 = api.endorsements()
-        api.account_unfollow(user)        
+        api.account_unfollow(user)
         assert relationship
         assert not relationship['endorsed']
-        assert not user["id"] in map(lambda x: x["id"], endorsed2)
+        assert user["id"] not in map(lambda x: x["id"], endorsed2)
 
 @pytest.mark.vcr()
 def test_preferences(api):
@@ -252,7 +252,7 @@ def test_featured_tags(api):
         assert featured_tag_list[0].name == "coolfree"
         assert "url" in featured_tag_list[0]
     finally:
-        if not featured_tag is None:
+        if featured_tag is not None:
             api.featured_tag_delete(featured_tag)
         api.featured_tag_delete(featured_tag_2) 
 

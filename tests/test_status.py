@@ -169,4 +169,4 @@ def test_scheduled_status(api):
 
     api.scheduled_status_delete(scheduled_toot_2)
     scheduled_toot_list_2 = api.scheduled_statuses()
-    assert not scheduled_toot_2.id in map(lambda x: x.id, scheduled_toot_list_2)
+    assert scheduled_toot_2.id not in map(lambda x: x.id, scheduled_toot_list_2)

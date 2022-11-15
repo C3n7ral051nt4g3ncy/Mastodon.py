@@ -8,7 +8,7 @@ def test_instance(api):
 
     assert isinstance(instance, dict)  # hehe, instance is instance
 
-    expected_keys = set(('description', 'email', 'title', 'uri', 'version', 'urls'))
+    expected_keys = {'description', 'email', 'title', 'uri', 'version', 'urls'}
     assert set(instance.keys()) >= expected_keys
 
 @pytest.mark.vcr()

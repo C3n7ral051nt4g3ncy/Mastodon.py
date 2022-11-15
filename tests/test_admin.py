@@ -84,27 +84,27 @@ def test_admin_reports(api, api2, status):
     report = api2.report(account, status, "api crimes")
     assert(report)
     assert(not report.action_taken)
-    
+
     report_list = api2.admin_reports()
     assert(report.id in [x.id for x in report_list])
-    
+
     report = api2.admin_report_resolve(report)
     report_list = api2.admin_reports()
     assert(report.action_taken)
     assert(report.action_taken_by_account.id == account2.id)
-    assert(not report.id in [x.id for x in report_list])
-    
+    assert report.id not in [x.id for x in report_list]
+
     report = api2.admin_report_reopen(report)
     report_list = api2.admin_reports()
     assert(not report.action_taken)
     assert(report.id in [x.id for x in report_list])
-    
+
     report = api2.admin_report_assign(report)
     assert(report.assigned_account.id == account2.id)
-    
+
     report = api2.admin_report_unassign(report)
     assert(report.assigned_account is None)
-    
+
     report2 = api2.admin_report(report)
     assert(report2)
     assert(report2.id == report.id)     

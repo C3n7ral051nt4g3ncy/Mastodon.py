@@ -21,10 +21,10 @@ def test_search_pre_2_9_2(api):
     with vcr.use_cassette('test_search.yaml', cassette_library_dir='tests/cassettes_pre_2_9_2', record_mode='none'):    
         results = api.search_v1('mastodonpy_test')
         assert isinstance(results, dict)
-        
+
         results = api.search_v2('mastodonpy_test')
         assert isinstance(results, dict)
-        
+
         results = api.search('mastodonpy_test')
         assert isinstance(results, dict)
 

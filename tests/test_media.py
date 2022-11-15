@@ -38,14 +38,14 @@ def test_media_post(api, sensitive):
         focus=(-0.5, 0.3),
         thumbnail='tests/amewatson.jpg'
     )
-    
+
     assert media
     assert media.url is None
 
     time.sleep(10)
     media2 = api.media(media)
     assert media2.id == media.id
-    assert not media2.url is None
+    assert media2.url is not None
 
     status = api.status_post(
         'LOL check this out',

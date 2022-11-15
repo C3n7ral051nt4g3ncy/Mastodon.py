@@ -58,8 +58,8 @@ def test_filter_serverside(api, api2):
         time.sleep(2)
         tl = api.timeline_home()
         try:
-            assert not status_1['id'] in map(lambda st: st['id'], tl)
-            assert not status_2['id'] in map(lambda st: st['id'], tl)
+            assert status_1['id'] not in map(lambda st: st['id'], tl)
+            assert status_2['id'] not in map(lambda st: st['id'], tl)
             assert status_3['id'] in map(lambda st: st['id'], tl)
             assert status_4['id'] in map(lambda st: st['id'], tl)
         finally:
@@ -80,7 +80,7 @@ def test_filter_clientside(api, api2):
         all_filters = api.filters()
         for mastodon_filter in all_filters:
             api.filter_delete(mastodon_filter)
-        
+
         time.sleep(2)
         api.account_follow(api2.account_verify_credentials())
         keyword_filter_1 = api.filter_create("anime", ['home'], irreversible = False, whole_word = False, expires_in = None)
@@ -91,17 +91,17 @@ def test_filter_clientside(api, api2):
         status_3 = api2.toot("Girugameshnetworking!")
         status_4 = api2.toot("I love japanimation!")
         time.sleep(2)
-        
+
         tl = api.timeline_home()
         try:
             assert status_1['id'] in map(lambda st: st['id'], tl)
             assert status_2['id'] in map(lambda st: st['id'], tl)
             assert status_3['id'] in map(lambda st: st['id'], tl)
             assert status_4['id'] in map(lambda st: st['id'], tl)
-            
+
             filtered = api.filters_apply(tl, [keyword_filter_1, keyword_filter_2, keyword_filter_3], 'home')
-            assert not status_1['id'] in map(lambda st: st['id'], filtered)
-            assert not status_2['id'] in map(lambda st: st['id'], filtered)
+            assert status_1['id'] not in map(lambda st: st['id'], filtered)
+            assert status_2['id'] not in map(lambda st: st['id'], filtered)
             assert status_3['id'] in map(lambda st: st['id'], filtered)
             assert status_4['id'] in map(lambda st: st['id'], filtered)
         finally:

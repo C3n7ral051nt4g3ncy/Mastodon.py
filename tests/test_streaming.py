@@ -23,7 +23,7 @@ def patch_streaming():
     if streaming_is_patched == True:
         return
     streaming_is_patched = True
-    
+
     real_get_response = vcr.stubs.VCRConnection.getresponse
     def fake_get_response(*args, **kwargs):
         global close_connections
@@ -35,7 +35,7 @@ def patch_streaming():
                 response = real_connection_real_get_response(*args, **kwargs)
                 real_body = b""
                 try:
-                    while close_connections == False:
+                    while not close_connections:
                         if len(select.select([response], [], [], 0.01)[0]) > 0:
                             chunk = response.read(1)
                             real_body += chunk
@@ -44,8 +44,10 @@ def patch_streaming():
                 print(real_body)
                 response.read = (lambda: real_body)
                 return response
+
             args[0].real_connection.getresponse = fakeRealConnectionGetresponse
         return real_get_response(*args, **kwargs)
+
     vcr.stubs.VCRConnection.getresponse = fake_get_response
 
 def streaming_close():
@@ -75,11 +77,9 @@ class Listener(StreamListener):
 
     def on_blahblah(self, data):
         self.bla_called = True
-        pass
 
     def on_do_something(self, data):
         self.do_something_called = True
-        pass
 
     def handle_heartbeat(self):
         self.heartbeats += 1

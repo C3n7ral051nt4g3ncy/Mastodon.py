@@ -14,7 +14,7 @@ def test_list_create(api, mastodon_list):
 @pytest.mark.vcr()
 def test_list_update(api, mastodon_list):
     mastodon_list_modified = api.list_update(mastodon_list, 'fry kids')
-    assert not mastodon_list in api.lists()
+    assert mastodon_list not in api.lists()
     assert mastodon_list_modified in api.lists()
     assert api.list(mastodon_list) == mastodon_list_modified
     

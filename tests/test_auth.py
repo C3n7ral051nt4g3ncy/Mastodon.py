@@ -15,7 +15,7 @@ def test_auth_request_url(api):
     assert query['client_id'][0] == api.client_id
     assert query['response_type'][0] == 'code'
     assert query['redirect_uri'][0] == 'urn:ietf:wg:oauth:2.0:oob'
-    assert set(query['scope'][0].split()) == set(('read', 'write', 'follow', 'push'))
+    assert set(query['scope'][0].split()) == {'read', 'write', 'follow', 'push'}
 
 
 def test_log_in_none(api_anonymous):
@@ -43,15 +43,12 @@ def test_revoke(api_anonymous):
         assert False
     except Exception as e:
         print(e)
-        pass
-
     api_revoked_token = Mastodon(access_token = token)
     try:
         api_anonymous.toot("illegal access detected")
         assert False
     except Exception as e:
         print(e)
-        pass
 
 @pytest.mark.vcr()
 def test_log_in_password_incorrect(api_anonymous):

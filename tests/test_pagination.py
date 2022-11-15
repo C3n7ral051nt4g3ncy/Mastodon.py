@@ -14,9 +14,9 @@ UNLIKELY_HASHTAG = "fgiztsshwiaqqiztpmmjbtvmescsculuvmgjgopwoeidbcrixp"
 
 @contextmanager
 def many_statuses(api, n=10, suffix=''):
-    statuses = list()
+    statuses = []
     for i in range(n):
-        status = api.status_post("Toot number {}!{}".format(i, suffix))
+        status = api.status_post(f"Toot number {i}!{suffix}")
         statuses.append(status)
     yield statuses
     for status in statuses:
@@ -90,7 +90,7 @@ def test_fetch_next_previous_from_pagination_info_old_pagination(api):
 
 @pytest.mark.vcr()
 def test_fetch_remaining(api):
-    with many_statuses(api, n=30, suffix=' #'+UNLIKELY_HASHTAG):
+    with many_statuses(api, n=30, suffix=f' #{UNLIKELY_HASHTAG}'):
         hashtag = api.timeline_hashtag(UNLIKELY_HASHTAG, limit=10)
         hashtag_remaining = api.fetch_remaining(hashtag)
         assert hashtag_remaining
